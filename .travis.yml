@@ -1,3 +1,4 @@
+dist: trusty # for newer cmake
 sudo: required
 language: cpp
 
