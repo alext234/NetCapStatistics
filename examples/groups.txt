@@ -1,0 +1,35 @@
+# mappings of ip address to host name
+60.234.152.124      host1  
+69.44.153.178       host2
+80.37.9.37          host3
+82.210.155.248      host4
+194.109.162.159     host5
+202.88.252.50       host6
+213.122.214.127     host7
+213.202.193.43      host8
+
+# mappings of hosts to groups
+[group1]
+host1 
+host2
+host3
+host4
+
+[group2]
+host5
+host6
+host7
+host8
+
+[group3]
+host1
+host2
+host5
+host6
+
+[group4]
+host3
+host4
+host7
+host8
+
