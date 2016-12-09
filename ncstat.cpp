@@ -18,9 +18,10 @@ int main (int argc, char* argv[])
     options.add_option ("", "m", "map", "mapping file", cxxopts::value<std::string>(mapfile), "", true)  ;
     options.parse(argc, argv);
 
-    if (options.count("help"))
+    if (options.count("help")||input=="" || mapfile=="")
     {
       std::cout << options.help({""}) << std::endl;
       exit(0);
-    }
+    }    
+
 }
