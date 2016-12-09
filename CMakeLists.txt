@@ -33,5 +33,5 @@ target_link_libraries(runtests_stat cpppcap)
 target_link_libraries(runtests_stat pcap)
 
 
-#add_executable(ncstat ncstat.cpp)
-#target_link_libraries(ncstat pcap)
+add_executable(ncstat ncstat.cpp)
+target_link_libraries(ncstat pcap)
