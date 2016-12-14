@@ -10,7 +10,7 @@ public:
        hostSet.insert(host); 
     }
     size_t size() { return hostSet.size();}
-private:
+protected:
     std::string name;
     std::set<std::reference_wrapper<const Hostipv4>> hostSet;
     

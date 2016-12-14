@@ -2,8 +2,10 @@
 #include <iostream>
 #include "hostip.h"
 #include "hostgroup.h"
+#include "group_file_parser.h"
 
 using namespace testing;
+using namespace std;
 
 TEST(ParseHostIp, FromString) {
    Hostipv4 ip {"192.168.20.1"}; 
@@ -35,7 +37,11 @@ TEST(HostGroup, addHost) {
 }
 
 TEST(ParseGroupFile, CheckHostName) {
-    // TODO: given a group file with mapping ip -> hostname, check if the parsing is correct
+    string filename = SAMPLE_PCAP_DIR;
+    filename += "groups.txt";
+
+    GroupFileParser groupFileParser{filename};
+    //auto listOfHostIp = groupFileParser.getListOfHostIp();
 }
 
 int main(int argc, char *argv[])
