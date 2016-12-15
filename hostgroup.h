@@ -17,7 +17,15 @@ public:
     void addHost (std::shared_ptr<Hostipv4> host) {
        hostSet.insert(host); 
     }
+    std::shared_ptr<Hostipv4> find (std::string hostname) {
+        auto tempHostIp = std::make_shared<Hostipv4> ("0.0.0.0");
+        tempHostIp->setHostname(hostname);
+        auto it = hostSet.find(tempHostIp);
+        if (it==hostSet.end()) return nullptr;
+        return *it;
+    }
     size_t size() { return hostSet.size();}
+    std::string getName () {return name;}
 protected:
     std::string name;
     std::set<std::shared_ptr<Hostipv4>, shared_ptr_host_ipv4_compare> hostSet;

@@ -17,26 +17,37 @@ private:
     std::string _reason;
 };
 
+
+struct shared_ptr_host_group_compare {
+    bool operator() (const std::shared_ptr<HostGroup>& lhs, const std::shared_ptr<HostGroup>& rhs) const{
+        return lhs->getName() < rhs->getName();
+    }
+};
+
 template <typename T> // T should be Hostipv4 or its derived class
 class GroupFileParser {
 public:
-    GroupFileParser(std::string filename) {
+    GroupFileParser(std::string filename) : allHosts{new HostGroup{"GlobalGroup"}} {
         static_assert (  std::is_base_of<Hostipv4, T>::value, "T should be Hostipv4 or its derived class");
         parseFile(filename);
     }
+    const auto getAllGroups() { return allGroups;};
 
 private:
     void parseFile(std::string filename);
-    std::map<std::string,std::shared_ptr<T>> listOfHostIp;
+    using ptr_HostGroup = std::shared_ptr<HostGroup>;
+    ptr_HostGroup allHosts;
+    std::set<ptr_HostGroup, shared_ptr_host_group_compare> allGroups;
+    
     
 };
-
 
 //// class implementation
 template <typename T>
 void GroupFileParser<T>::parseFile(std::string filename) {
     std::ifstream ifs(filename);
     std::string line;
+    ptr_HostGroup currentGroup=nullptr;
     while(std::getline(ifs, line).good()) {
         std::istringstream iss(line);
         std::string first, second;
@@ -49,25 +60,40 @@ void GroupFileParser<T>::parseFile(std::string filename) {
             try {
                 auto hostIp = std::make_shared<T> (first);
                 hostIp -> setHostname (second);
-                listOfHostIp[first] = hostIp;                
+                allHosts->addHost (hostIp);
 
             } catch (const ParseIpException& ex) {
                 throw;
             }
         } else 
         if (first.length()>0 && second.length()==0) {
-            // TODO: handle [] and hostname 
             if (first[0] =='[') {
                 auto closeFound = first.find(']', 1);
                 if (closeFound==std::string::npos) { // not found
                     throw  GroupFileParserException("invalid syntax at '"+line+"'");
                 }
                 auto groupName= first.substr(1,closeFound-1);
-                // TODO: create group and add to group list; track the current group
-            }
-            // TODO: note the case of comment
+                auto newGroup = std::make_shared<HostGroup> (groupName);
+                
+                auto r = allGroups.insert(newGroup);
+                if (r.second==false) {
+                    newGroup = *r.first; // access to the same group
+                }
+                currentGroup = newGroup;
 
-            //throw ParseGroupFileException if needed
+            } else { 
+                // should be hostname. check if exist
+                auto host =  allHosts->find(first);
+                if (host  ==nullptr) {
+                    throw GroupFileParserException("hostname not defined at '"+line+"'");
+                }
+                if (currentGroup == nullptr) {
+                    throw GroupFileParserException("hostname without a group at '"+line+"'");
+                }
+                currentGroup->addHost(host);
+                
+            }
+
         }
 
 

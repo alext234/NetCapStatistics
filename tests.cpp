@@ -33,6 +33,7 @@ TEST(HostGroup, addHost) {
     group.addHost (std::make_shared<Hostipv4> (std::move(ip2)));
     ASSERT_THAT (group.size(), Eq(size_t(2))); 
 
+    ASSERT_THAT (group.find("host2"), Ne(nullptr));
     
 }
 
@@ -69,7 +70,27 @@ TEST(ParseGroupFile, CheckHostName) {
     filename += "groups.txt";
 
     GroupFileParser<Hostipv4Derived> groupFileParser{filename};
-    //auto listOfHostIp = groupFileParser.getListOfHostIp();
+    auto allGroups = groupFileParser.getAllGroups();
+
+    
+    ASSERT_THAT (allGroups.find (std::make_shared<HostGroup>("group1")), Ne(allGroups.end())); 
+    ASSERT_THAT (allGroups.find (std::make_shared<HostGroup>("group2")), Ne(allGroups.end())); 
+    ASSERT_THAT (allGroups.find (std::make_shared<HostGroup>("group3")), Ne(allGroups.end())); 
+    ASSERT_THAT (allGroups.find (std::make_shared<HostGroup>("group4")), Ne(allGroups.end())); 
+
+    auto group2_it = allGroups.find(std::make_shared<HostGroup> ("group2"));
+    auto group2 = *group2_it;
+    ASSERT_THAT (group2->find ("host5"), Ne (nullptr));
+    ASSERT_THAT (group2->find ("host6"), Ne (nullptr));
+    ASSERT_THAT (group2->find ("host7"), Ne (nullptr));
+    ASSERT_THAT (group2->find ("host8"), Ne (nullptr));
+
+    auto group4_it = allGroups.find(std::make_shared<HostGroup> ("group4"));
+    auto group4 = *group4_it;
+    ASSERT_THAT (group4->find ("host3"), Ne (nullptr));
+    ASSERT_THAT (group4->find ("host4"), Ne (nullptr));
+    ASSERT_THAT (group4->find ("host7"), Ne (nullptr));
+    ASSERT_THAT (group4->find ("host8"), Ne (nullptr));
 }
 
 int main(int argc, char *argv[])
