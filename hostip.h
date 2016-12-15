@@ -31,6 +31,7 @@ public:
         }
 
     }
+    virtual ~Hostipv4() {}
    
     void setHostname (std::string name) { hostname = name;}
     std::string getHostname () {return hostname;};
