@@ -35,4 +35,4 @@ target_link_libraries(runtests_stat pcap)
 
 add_executable(ncstat ncstat.cpp)
 add_dependencies(ncstat runtests_stat) # test binaries should be ok before building the actual app
-target_link_libraries(ncstat pcap)
+target_link_libraries(ncstat cpppcap pcap)

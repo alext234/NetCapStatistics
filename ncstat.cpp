@@ -2,8 +2,28 @@
 #include <cxxopts.hpp>
 #include <string>
 #include <fstream>
+#include "packet_stat.h"
+#include "cpppcap.h"
 
 using namespace std;
+using namespace Pcap;
+
+shared_ptr<PacketStat> processPcapList (const vector<string>& pcapList) {
+
+    auto packetStat = make_shared<PacketStat>();
+
+    for (const auto& pcapFile: pcapList) {
+        auto dev = openOffline(pcapFile);
+        dev->registerObserver(packetStat);
+        dev->loop();        
+       
+    }
+
+    return packetStat;
+    
+}
+
+
 /* 
 * command line arguments:
 */
@@ -49,7 +69,12 @@ int main (int argc, char* argv[])
         }
 
 
-        cout <<"start reading from : " << endl;
-        for (const auto& f: pcapList) { cout << '\t' << f << endl;}
+        cout <<"start reading from : ";
+        for (const auto& f: pcapList) { cout << '\t' << f; }
+        cout << endl;
+        auto stat = processPcapList (pcapList);
+        stat -> print();
+
+        
     }
 }
