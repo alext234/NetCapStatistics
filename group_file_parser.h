@@ -32,13 +32,13 @@ public:
         parseFile(filename);
     }
     const auto getAllGroups() { return allGroups;};
-
+    const auto& getMapIpToHost() { return mapIpToHost;} 
 private:
     void parseFile(std::string filename);
     using ptr_HostGroup = std::shared_ptr<HostGroup>;
     ptr_HostGroup allHosts;
     std::set<ptr_HostGroup, shared_ptr_host_group_compare> allGroups;
-    
+    std::map<uint32_t, std::shared_ptr<T>> mapIpToHost; 
     
 };
 
@@ -60,7 +60,8 @@ void GroupFileParser<T>::parseFile(std::string filename) {
             try {
                 auto hostIp = std::make_shared<T> (first);
                 hostIp -> setHostname (second);
-                allHosts->addHost (hostIp);
+                allHosts->addHost (hostIp);                
+                mapIpToHost[hostIp->to_uint32t()] = hostIp;
 
             } catch (const ParseIpException& ex) {
                 throw;

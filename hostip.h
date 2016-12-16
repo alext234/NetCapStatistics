@@ -39,7 +39,14 @@ public:
     uint8_t B() {return b;};
     uint8_t C() {return c;};
     uint8_t D() {return d;};
+    uint32_t to_uint32t() { 
+        uint32_t ret=d;
+        ret|=c<<8;
+        ret|=b<<16;
+        ret|=a<<24;
+        return ret;
 
+    } 
     // comparison for set operation      
     friend bool operator< (const Hostipv4 &left, const Hostipv4 &right) {
         return left.hostname< right.hostname;

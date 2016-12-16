@@ -15,6 +15,10 @@ TEST(ParseHostIp, FromString) {
    ASSERT_THAT (ip.D(), Eq(1));
 }
 
+TEST(ParseHostIp, CheckUint32) {
+   Hostipv4 ip {"192.168.45.33"}; 
+   ASSERT_THAT(ip.to_uint32t(), Eq(0xC0A82D21));
+}
 
 TEST(HostGroup, addHost) {
     HostGroup group {"Group A"};

@@ -11,6 +11,8 @@ public:
     }
 private:
     void onNotified(const Packet& packet) override { // packet received
+        // TODO get source and destination ip address (if there is)
+        // 
     }
     
 };
