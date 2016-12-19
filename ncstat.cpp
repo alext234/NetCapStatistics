@@ -4,13 +4,13 @@
 #include <fstream>
 #include "packet_stat.h"
 #include "cpppcap.h"
+#include "group_file_parser.h"
 
 using namespace std;
 using namespace Pcap;
 
-shared_ptr<PacketStat> processPcapList (const vector<string>& pcapList) {
+void processPcapList (std::shared_ptr<PacketStat>& packetStat, const vector<string>& pcapList) {
 
-    auto packetStat = make_shared<PacketStat>();
 
     for (const auto& pcapFile: pcapList) {
         auto dev = openOffline(pcapFile);
@@ -19,8 +19,6 @@ shared_ptr<PacketStat> processPcapList (const vector<string>& pcapList) {
        
     }
 
-    return packetStat;
-    
 }
 
 
@@ -44,8 +42,12 @@ int main (int argc, char* argv[])
     {
       cout << options.help({""}) << endl;
       exit(0);
-    }    
+    }   
+    // parse mapping file
+    GroupFileParser<HostStat> groupFileParser{mapfile}; 
+    auto mapIpToHost  = groupFileParser.getMapIpToHost();
     
+    auto packetStat = make_shared<PacketStat>(mapIpToHost);
     // check file extension
     auto dotPos = input.find_last_of('.');
     if (dotPos ==  string::npos) {
@@ -72,9 +74,9 @@ int main (int argc, char* argv[])
         cout <<"start reading from : ";
         for (const auto& f: pcapList) { cout << '\t' << f; }
         cout << endl;
-        auto stat = processPcapList (pcapList);
-        stat -> print();
+        processPcapList (packetStat, pcapList);
 
+        // TODO: print statistics by group
         
     }
 }
