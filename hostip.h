@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <regex>
+#include <sstream>
 
 class ParseIpException: public std::exception {
 public:
@@ -35,6 +36,11 @@ public:
    
     void setHostname (std::string name) { hostname = name;}
     std::string getHostname () {return hostname;};
+    std::string getIpString () {
+        std::ostringstream ss;
+        ss<<int(a)<<"."<<int(b)<<"."<<int(c)<<"."<<int(d);
+        return ss.str();
+    }
     uint8_t A() {return a;};
     uint8_t B() {return b;};
     uint8_t C() {return c;};

@@ -32,6 +32,7 @@ public:
         parseFile(filename);
     }
     const auto getAllGroups() { return allGroups;};
+    const auto getAllhostGroup() { return allHosts;};
     const auto& getMapIpToHost() { return mapIpToHost;} 
 private:
     void parseFile(std::string filename);

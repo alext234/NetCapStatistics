@@ -26,6 +26,7 @@ public:
     }
     size_t size() { return hostSet.size();}
     std::string getName () {return name;}
+    auto getHosts() {return hostSet;}
 protected:
     std::string name;
     std::set<std::shared_ptr<Hostipv4>, shared_ptr_host_ipv4_compare> hostSet;

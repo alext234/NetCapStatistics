@@ -25,15 +25,53 @@ void processPcapList (shared_ptr<PacketStat>& packetStat, const vector<string>& 
        
     }
 
+
 }
 
 
-void printStats (shared_ptr<PacketStat>& packetStat) {
+void printStats (shared_ptr<PacketStat>& packetStat,GroupFileParser<HostStat>& groupFileParser  ) {
     auto listOfUnmappedIps = packetStat->getListOfUnmappedIps();
-    cout<<"these IP's are not mapped to hostname :" <<endl;
-    for (auto ip: listOfUnmappedIps) { printIp(ip);    }
+    if (listOfUnmappedIps.size() >0) {
+        cout<<"these IP's are not mapped to hostname :" <<endl;
+        for (auto ip: listOfUnmappedIps) { printIp(ip);    }
+    }
+
+    cout<<dec;
+    cout.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
+
+    auto allGroups = groupFileParser.getAllGroups();
+    for (auto group: allGroups) { // NOTE: this is not so efficient and only offline, not good for realtime stats update
+        auto allHostsInGroup = group->getHosts();
+
+        uint64_t groupTx=0, groupRx=0;
+        for (auto host: allHostsInGroup) {
+            groupTx +=static_pointer_cast<HostStat>(host)->getTxBytes();
+            groupRx +=static_pointer_cast<HostStat>(host)->getRxBytes();
+        }
+        cout << group->getName() <<":"<<endl;
+        cout <<'\t'<<"Tx: "<<groupTx<<" bytes"<<endl;
+        cout <<'\t'<<"Rx: "<<groupRx<<" bytes"<<endl;
+    }
+   
+    
+    auto allMappedHosts =groupFileParser.getAllhostGroup()->getHosts();
+    uint64_t allMappedHostsTx=0;
+    uint64_t allMappedHostsRx=0;
+    for (auto host: allMappedHosts) {
+        
+        auto hostC = static_pointer_cast<HostStat>(host);
+        cout << hostC->getIpString() <<" "<<hostC->getHostname() <<":"<<endl;
+        allMappedHostsTx+= hostC->getTxBytes();
+        allMappedHostsRx+= hostC->getRxBytes();
+        cout <<'\t'<<"Tx: "<<hostC->getTxBytes()<<" bytes"<<endl;
+        cout <<'\t'<<"Rx: "<<hostC->getRxBytes()<<" bytes"<<endl;
+   }
+
+   cout <<"All mapped hosts Tx: "<<allMappedHostsTx<<" bytes"<<endl;
+   cout <<"All mapped hosts Rx: "<<allMappedHostsRx<<" bytes"<<endl;
 
 
+        
 }
 /* 
 * command line arguments:
@@ -89,7 +127,7 @@ int main (int argc, char* argv[])
         cout << endl;
         processPcapList (packetStat, pcapList);
 
-        printStats (packetStat);
+        printStats (packetStat, groupFileParser);
         
     }
 }
