@@ -9,7 +9,13 @@
 using namespace std;
 using namespace Pcap;
 
-void processPcapList (std::shared_ptr<PacketStat>& packetStat, const vector<string>& pcapList) {
+void printIp (uint32_t ip) {
+        cout << ((ip>>24)&0xff) <<".";
+        cout << ((ip>>16)&0xff) <<".";
+        cout << ((ip>>8)&0xff) <<".";
+        cout << ((ip)&0xff) <<endl;
+}
+void processPcapList (shared_ptr<PacketStat>& packetStat, const vector<string>& pcapList) {
 
 
     for (const auto& pcapFile: pcapList) {
@@ -22,6 +28,13 @@ void processPcapList (std::shared_ptr<PacketStat>& packetStat, const vector<stri
 }
 
 
+void printStats (shared_ptr<PacketStat>& packetStat) {
+    auto listOfUnmappedIps = packetStat->getListOfUnmappedIps();
+    cout<<"these IP's are not mapped to hostname :" <<endl;
+    for (auto ip: listOfUnmappedIps) { printIp(ip);    }
+
+
+}
 /* 
 * command line arguments:
 */
@@ -76,7 +89,7 @@ int main (int argc, char* argv[])
         cout << endl;
         processPcapList (packetStat, pcapList);
 
-        // TODO: print statistics by group
+        printStats (packetStat);
         
     }
 }

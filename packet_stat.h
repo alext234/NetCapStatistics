@@ -3,6 +3,7 @@
 
 #include "cpppcap.h"
 #include "hostip.h"
+#include <set>
 
 using namespace Pcap;
 using namespace std;
@@ -34,10 +35,11 @@ public:
     PacketStat (map<uint32_t, shared_ptr<HostStat>>& mapIpToHost) : mapIpToHost{mapIpToHost} {
     }
 
-
+    auto getListOfUnmappedIps() {return listOfUnmappedIps;}
 
 private:
     map<uint32_t, shared_ptr<HostStat>>&  mapIpToHost;
+    set<uint32_t> listOfUnmappedIps;
 
     enum {
         ETHERTYPE_IPV4 = 0x0800
@@ -97,11 +99,7 @@ private:
     }
 
     void trackUnmappedIp (uint32_t ip) {
-        static map<uint32_t,bool> listOfUnmappedIps;
-        auto ret = listOfUnmappedIps.insert(make_pair(ip,true));
-        if (ret.second==true) {
-            cout << "ip "<<hex<<ip<<" is not mapped to hostname "<<endl;        
-        }
+        listOfUnmappedIps.insert(ip);
 
     }
 
