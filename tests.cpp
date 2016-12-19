@@ -95,6 +95,14 @@ TEST(ParseGroupFile, CheckHostName) {
     ASSERT_THAT (group4->find ("host4"), Ne (nullptr));
     ASSERT_THAT (group4->find ("host7"), Ne (nullptr));
     ASSERT_THAT (group4->find ("host8"), Ne (nullptr));
+
+
+    auto mapIpToHost =groupFileParser.getMapIpToHost();
+    auto ret = mapIpToHost.find(0x50250925);  // 80.37.9.37
+    ASSERT_THAT (ret, Ne(mapIpToHost.end()));
+    
+
+
 }
 
 int main(int argc, char *argv[])

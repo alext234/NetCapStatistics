@@ -11,6 +11,9 @@ class HostStat: public Hostipv4  {
 public:
     HostStat(string ip_string): Hostipv4(ip_string), rxBytes{0}, txBytes{0} {}
 
+    inline void incTxBytes (uint32_t n) { txBytes+=n;}
+    inline void incRxBytes (uint32_t n) { rxBytes+=n;}
+
     void incTxRxBytes (uint32_t tx, uint32_t rx) {
         txBytes +=tx;
         rxBytes +=rx;
@@ -28,7 +31,11 @@ private:
 
 class PacketStat:public AbstractObserver<Packet> {
 public:
-    PacketStat (auto mapIpToHost) : mapIpToHost{mapIpToHost} {}
+    PacketStat (map<uint32_t, shared_ptr<HostStat>>& mapIpToHost) : mapIpToHost{mapIpToHost} {
+    }
+
+
+
 private:
     map<uint32_t, shared_ptr<HostStat>>&  mapIpToHost;
 
@@ -61,6 +68,7 @@ private:
         auto ip = (ipv4_hdr_t*) ipv4RawData;
        
         //now we have ip->sr, ip->dst, and packet.len()
+        updatePacketStat(ip->src, ip->dst, packet);
 
 
 
@@ -71,7 +79,31 @@ private:
         
     }
 
+    void updatePacketStat (uint32_t src, uint32_t dst, const Packet& packet) {
+        auto len = packet.len();
+        auto srcHost = mapIpToHost.find(src);
+        auto dstHost = mapIpToHost.find(dst);
+        if (srcHost!=mapIpToHost.end()) {
+            srcHost->second->incTxBytes(len);
+        } else {
+            trackUnmappedIp(src);
+        }
 
+        if (dstHost!=mapIpToHost.end()) {
+            dstHost->second->incRxBytes (len);
+        } else {
+            trackUnmappedIp(dst);
+        }
+    }
+
+    void trackUnmappedIp (uint32_t ip) {
+        static map<uint32_t,bool> listOfUnmappedIps;
+        auto ret = listOfUnmappedIps.insert(make_pair(ip,true));
+        if (ret.second==true) {
+            cout << "ip "<<hex<<ip<<" is not mapped to hostname "<<endl;        
+        }
+
+    }
 
     
 };
