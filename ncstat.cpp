@@ -16,6 +16,8 @@ void processPcapList (shared_ptr<PacketStat>& packetStat, const vector<string>& 
 
 
     for (const auto& pcapFile: pcapList) {
+        cout <<"start reading from : "<<pcapFile<<endl;
+
         auto dev = openOffline(pcapFile);
         dev->registerObserver(packetStat);
         dev->loop();        
@@ -82,9 +84,6 @@ int main (int argc, char* argv[])
         }
 
 
-        cout <<"start reading from : ";
-        for (const auto& f: pcapList) { cout << '\t' << f; }
-        cout << endl;
         
         Summary summary (packetStat, groupFileParser.getAllGroups(), mapIpToHost);
         processPcapList (packetStat, pcapList);
