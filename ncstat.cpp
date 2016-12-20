@@ -125,6 +125,7 @@ int main (int argc, char* argv[])
         cout <<"start reading from : ";
         for (const auto& f: pcapList) { cout << '\t' << f; }
         cout << endl;
+
         processPcapList (packetStat, pcapList);
 
         printStats (packetStat, groupFileParser);

@@ -1,10 +1,16 @@
 #ifndef __HOST_STAT__
 #define __HOST_STAT__
 #include "hostip.h"
+#include "cpp_observer.h"
 
 using namespace std;
 
-class HostStat: public Hostipv4  {
+struct IncTxRx {
+    uint32_t tx;
+    uint32_t rx;
+};
+
+class HostStat: public Hostipv4, public Observable<IncTxRx>  {
 public:
     HostStat(string ip_string): Hostipv4(ip_string), rxBytes{0}, txBytes{0} {}
 
@@ -17,6 +23,7 @@ public:
 private:
     uint64_t rxBytes;
     uint64_t txBytes;
+    void incTxRxBytes (IncTxRx incTxRx);
     
 };
 
