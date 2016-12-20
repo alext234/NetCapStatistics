@@ -42,17 +42,12 @@ void printStats (shared_ptr<PacketStat>& packetStat,GroupFileParser& groupFilePa
     cout.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
 
     auto allGroups = groupFileParser.getAllGroups();
-    for (auto group: allGroups) { // NOTE: this is not so efficient and only offline, not good for realtime stats update
-        auto allHostsInGroup = group->getHosts();
+    for (auto group: allGroups) { 
+        auto groupStat = static_pointer_cast<GroupStat>(group);
 
-        uint64_t groupTx=0, groupRx=0;
-        for (auto host: allHostsInGroup) {
-            groupTx +=static_pointer_cast<HostStat>(host)->getTxBytes();
-            groupRx +=static_pointer_cast<HostStat>(host)->getRxBytes();
-        }
-        cout << group->getName() <<":"<<endl;
-        cout <<'\t'<<"Tx: "<<groupTx<<" bytes"<<endl;
-        cout <<'\t'<<"Rx: "<<groupRx<<" bytes"<<endl;
+        cout << groupStat->getName() <<":"<<endl;
+        cout <<'\t'<<"Tx: "<<groupStat->getTotalTxBytes()<<" bytes"<<endl;
+        cout <<'\t'<<"Rx: "<<groupStat->getTotalRxBytes()<<" bytes"<<endl;
     }
    
     
@@ -122,7 +117,7 @@ int main (int argc, char* argv[])
 
         processPcapList (packetStat, pcapList);
 
-        printStats (packetStat, groupFileParser);
+        printStats (packetStat, groupFileParser );
         
     }
 }
