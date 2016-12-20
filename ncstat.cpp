@@ -5,6 +5,8 @@
 #include "packet_stat.h"
 #include "cpppcap.h"
 #include "group_file_parser.h"
+#include "group_stat.h"
+
 
 using namespace std;
 using namespace Pcap;
@@ -98,8 +100,8 @@ int main (int argc, char* argv[])
         return std::make_shared<HostStat> (ip_string);
         
     };    
-    auto generateHostGroup = [](std::string name) -> std::shared_ptr<HostGroup>{
-        return std::make_shared<HostGroup> (name);
+    auto generateHostGroup = [](std::string name) -> std::shared_ptr<GroupStat>{
+        return std::make_shared<GroupStat> (name);
         
     };
     // parse mapping file
