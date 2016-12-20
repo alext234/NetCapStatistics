@@ -12,6 +12,7 @@ struct shared_ptr_host_ipv4_compare {
 class HostGroup {
 public:
     HostGroup(std::string name): name(name) {}
+    virtual ~HostGroup() {}
     virtual void addHost (std::shared_ptr<Hostipv4> host) ;
 
     std::shared_ptr<Hostipv4> find (std::string hostname) ;
