@@ -29,7 +29,7 @@ void processPcapList (shared_ptr<PacketStat>& packetStat, const vector<string>& 
 }
 
 
-void printStats (shared_ptr<PacketStat>& packetStat,GroupFileParser<HostStat>& groupFileParser  ) {
+void printStats (shared_ptr<PacketStat>& packetStat,GroupFileParser& groupFileParser  ) {
     auto listOfUnmappedIps = packetStat->getListOfUnmappedIps();
     if (listOfUnmappedIps.size() >0) {
         cout<<"these IP's are not mapped to hostname :" <<endl;
@@ -94,8 +94,16 @@ int main (int argc, char* argv[])
       cout << options.help({""}) << endl;
       exit(0);
     }   
+    auto generateHostStat = [](std::string ip_string) -> std::shared_ptr<HostStat>{
+        return std::make_shared<HostStat> (ip_string);
+        
+    };    
+    auto generateHostGroup = [](std::string name) -> std::shared_ptr<HostGroup>{
+        return std::make_shared<HostGroup> (name);
+        
+    };
     // parse mapping file
-    GroupFileParser<HostStat> groupFileParser{mapfile}; 
+    GroupFileParser groupFileParser{mapfile, generateHostStat, generateHostGroup}; 
     auto mapIpToHost  = groupFileParser.getMapIpToHost();
     
     auto packetStat = make_shared<PacketStat>(mapIpToHost);

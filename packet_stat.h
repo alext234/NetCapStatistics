@@ -13,13 +13,13 @@ using namespace std;
 
 class PacketStat:public AbstractObserver<Packet> {
 public:
-    PacketStat (map<uint32_t, shared_ptr<HostStat>>& mapIpToHost) : mapIpToHost{mapIpToHost} {
+    PacketStat (map<uint32_t, shared_ptr<Hostipv4>>& mapIpToHost) : mapIpToHost{mapIpToHost} {
     }
 
     const set<uint32_t>&  getListOfUnmappedIps();
 
 private:
-    map<uint32_t, shared_ptr<HostStat>>&  mapIpToHost;
+    map<uint32_t, shared_ptr<Hostipv4>>&  mapIpToHost;
     set<uint32_t> listOfUnmappedIps;
 
     void onNotified(const Packet& packet) override;

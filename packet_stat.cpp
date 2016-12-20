@@ -1,6 +1,7 @@
 #include "packet_stat.h"
 #include "hostip.h"
 #include <set>
+#include <memory>
 
 using namespace Pcap;
 using namespace std;
@@ -70,13 +71,15 @@ void PacketStat::updatePacketStat (uint32_t src, uint32_t dst, const Packet& pac
     auto srcHost = mapIpToHost.find(src);
     auto dstHost = mapIpToHost.find(dst);
     if (srcHost!=mapIpToHost.end()) {
-        srcHost->second->incTxBytes(len);
+        auto h = static_pointer_cast<HostStat> (srcHost->second);
+        h->incTxBytes(len);
     } else {
         trackUnmappedIp(src);
     }
 
     if (dstHost!=mapIpToHost.end()) {
-        dstHost->second->incRxBytes (len);
+        auto h = static_pointer_cast<HostStat> (dstHost->second);
+        h->incRxBytes (len);
     } else {
         trackUnmappedIp(dst);
     }

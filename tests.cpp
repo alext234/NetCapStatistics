@@ -72,10 +72,23 @@ TEST(ParseGroupFile, CheckHostName) {
     public:
         Hostipv4Derived (std::string ip_string) : Hostipv4(ip_string) {}
     };
+
+    class HostGroupDerived:public HostGroup {
+    public:
+        HostGroupDerived (std::string name) : HostGroup(name) {}
+    };
     string filename = SAMPLE_PCAP_DIR;
     filename += "groups.txt";
-
-    GroupFileParser<Hostipv4Derived> groupFileParser{filename};
+    
+    auto generateHostipv4Derived = [](std::string ip_string) -> std::shared_ptr<Hostipv4Derived>{
+        return std::make_shared<Hostipv4Derived> (ip_string);
+        
+    };
+    auto generateHostGroup = [](std::string name) -> std::shared_ptr<HostGroupDerived>{
+        return std::make_shared<HostGroupDerived> (name);
+        
+    };
+    GroupFileParser groupFileParser{filename, generateHostipv4Derived, generateHostGroup};
     auto allGroups = groupFileParser.getAllGroups();
 
     
