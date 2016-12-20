@@ -30,12 +30,12 @@ Run unit tests
 
 ## Usage
 
-We now move to examples directory
+We now move to *examples* directory
 ```
 cd ../examples
 ../build/ncstat
 ```
-Running ncstat will display help page
+Running *ncstat* will display help page
 ```
 Analyze and output summary of network captures
 Usage:
@@ -51,7 +51,8 @@ Usage:
 Mapping file contains the mapping from ip address to hostname and the grouping of hosts.
 
 ```
-cat groups.txt 
+$cat groups.txt 
+
 # mappings of ip address to host name
 60.234.152.124      host1  
 69.44.153.178       host2
@@ -91,7 +92,8 @@ host8
 Running ncstat with all options will give the following output.
 
 ```
-../build/ncstat -i files.lst -m groups.txt 
+$../build/ncstat -i files.lst -m groups.txt 
+
 start reading from : bt-tf1.pcap
 group1:
 	Tx: 273 bytes
