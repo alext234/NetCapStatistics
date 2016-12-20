@@ -6,17 +6,12 @@
 #include "cpppcap.h"
 #include "group_file_parser.h"
 #include "group_stat.h"
+#include "summary.h"
 
 
 using namespace std;
 using namespace Pcap;
 
-void printIp (uint32_t ip) {
-        cout << ((ip>>24)&0xff) <<".";
-        cout << ((ip>>16)&0xff) <<".";
-        cout << ((ip>>8)&0xff) <<".";
-        cout << ((ip)&0xff) <<endl;
-}
 void processPcapList (shared_ptr<PacketStat>& packetStat, const vector<string>& pcapList) {
 
 
@@ -30,30 +25,6 @@ void processPcapList (shared_ptr<PacketStat>& packetStat, const vector<string>& 
 
 }
 
-
-void printStats (shared_ptr<PacketStat>& packetStat,GroupFileParser& groupFileParser  ) {
-    auto listOfUnmappedIps = packetStat->getListOfUnmappedIps();
-    if (listOfUnmappedIps.size() >0) {
-        cout<<"these IP's are not mapped to hostname :" <<endl;
-        for (auto ip: listOfUnmappedIps) { printIp(ip);    }
-    }
-
-    cout<<dec;
-    cout.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
-
-    auto allGroups = groupFileParser.getAllGroups();
-    for (auto group: allGroups) { 
-        auto groupStat = static_pointer_cast<GroupStat>(group);
-
-        cout << groupStat->getName() <<":"<<endl;
-        cout <<'\t'<<"Tx: "<<groupStat->getTotalTxBytes()<<" bytes"<<endl;
-        cout <<'\t'<<"Rx: "<<groupStat->getTotalRxBytes()<<" bytes"<<endl;
-    }
-   
-    
-
-        
-}
 /* 
 * command line arguments:
 */
@@ -114,10 +85,12 @@ int main (int argc, char* argv[])
         cout <<"start reading from : ";
         for (const auto& f: pcapList) { cout << '\t' << f; }
         cout << endl;
-
+        
+        Summary summary (packetStat, groupFileParser.getAllGroups(), mapIpToHost);
         processPcapList (packetStat, pcapList);
-
-        printStats (packetStat, groupFileParser );
+        
+        
+        cout << summary.summaryString()<<endl;
         
     }
 }
