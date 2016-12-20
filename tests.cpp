@@ -4,7 +4,7 @@
 #include "hostgroup.h"
 #include "group_file_parser.h"
 #include "host_stat.h"
-
+#include "group_stat.h"
 
 using namespace testing;
 using namespace std;
@@ -145,6 +145,21 @@ TEST(HostStat, observeUpdate) {
 
     ASSERT_THAT(updateObserver->totalTxBytes, Eq(uint32_t(40)));
     ASSERT_THAT(updateObserver->totalRxBytes, Eq(uint32_t(100)));
+
+
+}
+TEST(HostStat, observeUpdateWithGroupStat) {
+    HostStat host{"10.0.0.15"};
+    auto group = std::make_shared<GroupStat>("TestGroup");
+    host.registerObserver (group);
+
+    host.incTxBytes(20);
+    host.incRxBytes(50);
+    host.incTxBytes(20);
+    host.incRxBytes(50);
+
+    ASSERT_THAT(group->getTotalTxBytes(), Eq(uint64_t(40)));
+    ASSERT_THAT(group->getTotalRxBytes(), Eq(uint64_t(100)));
 
 
 }

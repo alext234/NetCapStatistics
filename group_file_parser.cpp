@@ -8,6 +8,7 @@ void GroupFileParser::parseFile(std::string filename) {
     std::ifstream ifs(filename);
     std::string line;
     ptr_HostGroup currentGroup=nullptr;
+    auto allHosts = std::make_shared<HostGroup> ("AllHosts");
     while(std::getline(ifs, line).good()) {
         std::istringstream iss(line);
         std::string first, second;
@@ -20,7 +21,7 @@ void GroupFileParser::parseFile(std::string filename) {
             try {
                 std::shared_ptr<Hostipv4> hostIp = hostipv4Factory(first);
                 hostIp -> setHostname (second);
-                allHosts->addHost (hostIp);                
+                allHosts->addHost (hostIp);
                 mapIpToHost[hostIp->to_uint32t()] = hostIp;
 
             } catch (const ParseIpException& ex) {

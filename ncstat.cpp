@@ -56,22 +56,6 @@ void printStats (shared_ptr<PacketStat>& packetStat,GroupFileParser& groupFilePa
     }
    
     
-    auto allMappedHosts =groupFileParser.getAllhostGroup()->getHosts();
-    uint64_t allMappedHostsTx=0;
-    uint64_t allMappedHostsRx=0;
-    for (auto host: allMappedHosts) {
-        
-        auto hostC = static_pointer_cast<HostStat>(host);
-        cout << hostC->getIpString() <<" "<<hostC->getHostname() <<":"<<endl;
-        allMappedHostsTx+= hostC->getTxBytes();
-        allMappedHostsRx+= hostC->getRxBytes();
-        cout <<'\t'<<"Tx: "<<hostC->getTxBytes()<<" bytes"<<endl;
-        cout <<'\t'<<"Rx: "<<hostC->getRxBytes()<<" bytes"<<endl;
-   }
-
-   cout <<"All mapped hosts Tx: "<<allMappedHostsTx<<" bytes"<<endl;
-   cout <<"All mapped hosts Rx: "<<allMappedHostsRx<<" bytes"<<endl;
-
 
         
 }
