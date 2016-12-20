@@ -17,6 +17,9 @@ link_directories(${GOOGLETEST}/build/googlemock ${GOOGLETEST}/build/googlemock/g
 include_directories(${CPPOBSERVER})
 include_directories(${CPP_LIBPCAP})
 include_directories(${CXXOPTS}/include)
+if(NOT CMAKE_BUILD_TYPE)
+    message( SEND_ERROR "please set CMAKE_BUILD_TYPE to Debug or Release" )
+endif(NOT CMAKE_BUILD_TYPE)
 
 # set build type: cmake -DCMAKE_BUILD_TYPE=Debug  ; to see all options of AddressSanitizer, set the environment variable ASAN_OPTIONS=help=1
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-unused-parameter -fsanitize=address")

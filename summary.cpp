@@ -49,3 +49,6 @@ string Summary::summaryString() {
 }
 
 // TODO: output csv
+// TODO: output host of each group
+// TODO: option to not output host that has tx=0 and rx=0
+
