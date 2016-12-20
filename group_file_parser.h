@@ -6,6 +6,7 @@
 #include <string>
 #include <memory>
 #include <type_traits>
+#include <map>
 
 class GroupFileParserException: public std::exception {
 public:
