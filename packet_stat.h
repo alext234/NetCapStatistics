@@ -5,6 +5,7 @@
 #include "hostip.h"
 #include "host_stat.h"
 #include <set>
+#include <map>
 
 using namespace Pcap;
 using namespace std;
