@@ -9,7 +9,7 @@ struct shared_ptr_host_ipv4_compare {
     bool operator() (const std::shared_ptr<Hostipv4>& lhs, const std::shared_ptr<Hostipv4>& rhs)const;
 };
 
-class HostGroup {
+class HostGroup{
 public:
     HostGroup(std::string name): name(name) {}
     virtual ~HostGroup() {}
@@ -26,5 +26,7 @@ protected:
     
 };
 
-
+struct shared_ptr_host_group_compare {
+    bool operator() (const std::shared_ptr<HostGroup>& lhs, const std::shared_ptr<HostGroup>& rhs) const;
+};
 #endif // __HOST_GROUP__

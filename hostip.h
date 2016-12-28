@@ -4,6 +4,8 @@
 #include <string>
 #include <regex>
 #include <sstream>
+#include <set>
+
 
 class ParseIpException: public std::exception {
 public:
@@ -61,5 +63,7 @@ public:
 private:    
     uint8_t a,b,c,d;   
     std::string hostname;
+
+ 
 };
 #endif //__HOST_IP__

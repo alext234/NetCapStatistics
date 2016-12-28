@@ -10,10 +10,14 @@ public:
     virtual void addHost(std::shared_ptr<Hostipv4> host) override;
     uint64_t getTotalTxBytes ();
     uint64_t getTotalRxBytes ();
+    
+    using GroupSet = set<shared_ptr<GroupStat>>;
+    using GroupSetPtr = shared_ptr<GroupSet>;
+    static const GroupSet& getGroupsOfHost (std::shared_ptr<HostStat> host);
 private:
     void onNotified (const IncTxRx& update) override;
     uint64_t totalTxBytes=0;
     uint64_t totalRxBytes=0;
-
+    static void updateGroupList (std::shared_ptr<HostStat> host, std::shared_ptr<GroupStat> group);
 };
 #endif //__GROUP_STAT__

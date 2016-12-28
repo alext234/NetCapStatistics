@@ -116,6 +116,7 @@ TEST(ParseGroupFile, CheckHostName) {
     auto ret = mapIpToHost.find(0x50250925);  // 80.37.9.37
     ASSERT_THAT (ret, Ne(mapIpToHost.end()));
     
+    
 
 
 }
@@ -162,6 +163,35 @@ TEST(HostStat, observeUpdateWithGroupStat) {
     ASSERT_THAT(group->getTotalRxBytes(), Eq(uint64_t(100)));
 
 
+}
+
+
+TEST(HostStat, getGroupsOfHost) {
+
+    string filename = SAMPLE_PCAP_DIR;
+    filename += "groups.txt";
+    
+    auto generateHostStat = [](std::string ip_string) -> std::shared_ptr<HostStat>{
+        return std::make_shared<HostStat> (ip_string);
+        
+    };
+    auto generateGroupStat = [](std::string name) -> std::shared_ptr<GroupStat>{
+        return std::make_shared<GroupStat> (name);
+        
+    };
+    GroupFileParser groupFileParser{filename, generateHostStat, generateGroupStat};
+
+    auto mapIpToHost =groupFileParser.getMapIpToHost();
+    auto ret2 = mapIpToHost.find(0x50250925);  // 80.37.9.37
+    auto host = static_pointer_cast<HostStat>(ret2->second);
+    auto groups = GroupStat::getGroupsOfHost(host);
+    set<string> expectedGroupNames  {"group1", "group4"};
+    for (auto group: groups) {
+        ASSERT_THAT( expectedGroupNames.find(group->getName()), Ne(expectedGroupNames.end()));
+        expectedGroupNames.erase(group->getName());
+    }
+    
+    ASSERT_THAT(expectedGroupNames.size(), Eq(set<string>::size_type(0)));
 }
 int main(int argc, char *argv[])
 {
