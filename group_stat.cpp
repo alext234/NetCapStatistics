@@ -1,6 +1,6 @@
 #include "group_stat.h"
 #include "host_stat.h"
-
+#include <map>
 #include <memory>
 
 using namespace std;
