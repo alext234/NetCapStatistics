@@ -19,9 +19,7 @@ private:
 };
 
 
-struct shared_ptr_host_group_compare {
-    bool operator() (const std::shared_ptr<HostGroup>& lhs, const std::shared_ptr<HostGroup>& rhs) const;
-};
+
 
 class GroupFileParser {
 public:      

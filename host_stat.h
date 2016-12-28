@@ -10,9 +10,11 @@ struct IncTxRx {
     uint32_t rx;
 };
 
+class GroupStat; // forward declaration
 class HostStat: public Hostipv4, public Observable<IncTxRx>  {
 public:
     HostStat(string ip_string): Hostipv4(ip_string), rxBytes{0}, txBytes{0} {}
+    ~HostStat();
 
     void incTxBytes (uint32_t n);
     void incRxBytes (uint32_t n);
@@ -24,6 +26,8 @@ private:
     uint64_t rxBytes;
     uint64_t txBytes;
     void incTxRxBytes (IncTxRx incTxRx);
+
+    
     
 };
 

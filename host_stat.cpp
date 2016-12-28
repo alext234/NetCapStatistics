@@ -18,6 +18,9 @@ void HostStat::incTxRxBytes(IncTxRx incTxRx) {
     
 }
 
+HostStat::~HostStat() {
+}
+
 uint64_t HostStat::getRxBytes() { return rxBytes;}
 uint64_t HostStat::getTxBytes() { return txBytes;}
 

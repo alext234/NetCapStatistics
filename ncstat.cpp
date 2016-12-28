@@ -41,6 +41,8 @@ int main (int argc, char* argv[])
 
     options.add_option ("","i", "input", "pcap file (.cap, .pcap), .lst storing list of pcap files, or network interface", cxxopts::value<string> (input),"",  true);
     options.add_option ("", "m", "map", "mapping file", cxxopts::value<string>(mapfile), "", true)  ;
+
+
     options.parse(argc, argv);
 
     if (options.count("help")||input=="" || mapfile=="")
