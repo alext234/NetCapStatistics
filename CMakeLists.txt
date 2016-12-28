@@ -26,7 +26,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-u
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-unused-parameter")
 
 
-add_executable(runtests_stat  tests.cpp hostgroup.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp)
+add_executable(runtests_stat  tests.cpp test_counter_part.cpp hostgroup.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp)
 set(SAMPLE_PCAP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples/)
 set_target_properties(runtests_stat PROPERTIES COMPILE_FLAGS -D'SAMPLE_PCAP_DIR="${SAMPLE_PCAP_DIR}"')
 target_link_libraries(runtests_stat gmock)
