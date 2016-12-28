@@ -30,16 +30,18 @@ string Summary::summaryString() {
         auto groupStat = static_pointer_cast<GroupStat>(group);
 
         ss << groupStat->getName() <<":"<<endl;
-        ss <<'\t'<<"Tx: "<<groupStat->getTotalTxBytes()<<" bytes"<<endl;
-        ss <<'\t'<<"Rx: "<<groupStat->getTotalRxBytes()<<" bytes"<<endl;
+        auto groupMetric = groupStat->retrieve();
+        ss <<'\t'<<"Tx: "<<groupMetric.txBytes<<" bytes"<<endl;
+        ss <<'\t'<<"Rx: "<<groupMetric.rxBytes<<" bytes"<<endl;
     }
    
     // output hosts
     for (auto it=mapIpToHost.cbegin(); it!=mapIpToHost.cend(); ++it) {
         auto host = static_pointer_cast<HostStat>(it->second);
         ss << host->getHostname() <<" (" <<host->getIpString()<<"):"<<endl;
-        ss <<'\t'<<"Tx: "<<host->getTxBytes()<<" bytes"<<endl;
-        ss <<'\t'<<"Rx: "<<host->getRxBytes()<<" bytes"<<endl;
+        auto hostMetric = host->retrieve();
+        ss <<'\t'<<"Tx: "<<hostMetric.txBytes<<" bytes"<<endl;
+        ss <<'\t'<<"Rx: "<<hostMetric.rxBytes<<" bytes"<<endl;
     }
 
 

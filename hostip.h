@@ -5,7 +5,7 @@
 #include <regex>
 #include <sstream>
 #include <set>
-
+#include <memory>
 
 class ParseIpException: public std::exception {
 public:

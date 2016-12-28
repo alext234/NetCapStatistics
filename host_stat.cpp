@@ -3,25 +3,19 @@
 using namespace std;
 
 
-void HostStat::incTxBytes (uint32_t n) { 
-    incTxRxBytes({n,0});
-}
 
-void HostStat::incRxBytes (uint32_t n) { 
-    incTxRxBytes({0,n});
-}
-
-void HostStat::incTxRxBytes(IncTxRx incTxRx) {
-    txBytes +=incTxRx.tx;
-    rxBytes +=incTxRx.rx;
-    notifyObservers (incTxRx);
+void HostStat::add(Metric a) {
+    m.add(a);
+    notifyObservers (a);
     
 }
 
+const Metric & HostStat::retrieve() {
+    return m;
+}
+    
+
 HostStat::~HostStat() {
 }
-
-uint64_t HostStat::getRxBytes() { return rxBytes;}
-uint64_t HostStat::getTxBytes() { return txBytes;}
 
 
