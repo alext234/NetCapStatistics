@@ -9,32 +9,20 @@
 template <typename T>
 class CounterPartList {
 public:
-    void add (const std::shared_ptr<T>& cp, Metric addition) {
-        auto m= findAndInsert(cp);
+    void add (const std::shared_ptr<T>& cp, Metric addition);
 
-        m->add(addition);
-    }
-
-    const Metric& retrieve (const std::shared_ptr<T>& cp) {
-        auto m= findAndInsert(cp);
-
-        return *m;
-    }
+    const Metric& retrieve (const std::shared_ptr<T>& cp);
 
 private:  
     std::map<std::shared_ptr<T>, std::shared_ptr<Metric>, shared_ptr_less<T> >  cparts;
 
 
     // find, if not exist then insert
-    inline std::shared_ptr<Metric> findAndInsert(const std::shared_ptr<T>& cp) {
-        auto ret = cparts.find (cp);
-        if (ret==cparts.end()) {
-            return cparts[cp] = std::make_shared<Metric>();
-        } else {
-            return ret->second;
-        }
-
-    }
+    inline std::shared_ptr<Metric> findAndInsert(const std::shared_ptr<T>& cp) ;
 };
+
+#include "counter_part.ipp"
+
+
 
 #endif //__COUNTER_PART__

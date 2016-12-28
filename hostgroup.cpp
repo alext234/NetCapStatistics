@@ -16,4 +16,6 @@ std::set<std::shared_ptr<Hostipv4>,   shared_ptr_less<Hostipv4>>   HostGroup::ge
 }
 
 
-
+bool operator< (const HostGroup &left, const HostGroup &right) {
+    return left.name< right.name;
+} 
