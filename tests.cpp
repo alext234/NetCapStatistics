@@ -5,6 +5,7 @@
 #include "group_file_parser.h"
 #include "host_stat.h"
 #include "group_stat.h"
+#include "metric.h"
 
 using namespace testing;
 using namespace std;
@@ -124,16 +125,13 @@ TEST(ParseGroupFile, CheckHostName) {
 
 TEST(HostStat, observeUpdate) {
     HostStat host{"10.0.0.15"};
-    class UpdateObserver: public AbstractObserver<IncTxRx>{
+    class UpdateObserver: public AbstractObserver<Metric>{
     public:    
 
-        void onNotified (const IncTxRx& update) override {
-            totalTxBytes+=update.tx;
-            totalRxBytes+=update.rx;
+        void onNotified (const Metric& update) override {
+            m.add(update);
         }
-
-        uint32_t totalTxBytes=0;
-        uint32_t totalRxBytes=0;
+        Metric m;
     };
 
     auto updateObserver = std::make_shared<UpdateObserver>();
@@ -144,8 +142,8 @@ TEST(HostStat, observeUpdate) {
     host.incTxBytes(20);
     host.incRxBytes(50);
 
-    ASSERT_THAT(updateObserver->totalTxBytes, Eq(uint32_t(40)));
-    ASSERT_THAT(updateObserver->totalRxBytes, Eq(uint32_t(100)));
+    ASSERT_THAT(updateObserver->m.txBytes, Eq(uint32_t(40)));
+    ASSERT_THAT(updateObserver->m.rxBytes, Eq(uint32_t(100)));
 
 
 }

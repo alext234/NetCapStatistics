@@ -13,12 +13,12 @@ void GroupStat::addHost(shared_ptr<Hostipv4> host) {
     updateGroupList (hostStat, shared_from_this());
 }
 
-void GroupStat::onNotified (const IncTxRx& update) {
-    totalTxBytes +=update.tx;
-    totalRxBytes +=update.rx;
+void GroupStat::onNotified (const Metric& update) {
+    m.add(update);
+
 }
-uint64_t GroupStat::getTotalTxBytes () { return totalTxBytes;}
-uint64_t GroupStat::getTotalRxBytes () { return totalRxBytes;}
+uint64_t GroupStat::getTotalTxBytes () { return m.txBytes;}
+uint64_t GroupStat::getTotalRxBytes () { return m.rxBytes;}
 
 using GroupSet = GroupStat::GroupSet;
 using GroupSetPtr = GroupStat::GroupSetPtr;
