@@ -10,8 +10,7 @@ class GroupStat: public HostGroup, public AbstractObserver<Metric>, public std::
 public:
     GroupStat(std::string name) : HostGroup(name) {}
     virtual void addHost(std::shared_ptr<Hostipv4> host) override;
-    uint64_t getTotalTxBytes ();
-    uint64_t getTotalRxBytes ();
+    const Metric& retrieve();
     
     using GroupSet = set<shared_ptr<GroupStat>>;
     using GroupSetPtr = shared_ptr<GroupSet>;

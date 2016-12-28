@@ -72,14 +72,14 @@ void PacketStat::updatePacketStat (uint32_t src, uint32_t dst, const Packet& pac
     auto dstHost = mapIpToHost.find(dst);
     if (srcHost!=mapIpToHost.end()) {
         auto h = static_pointer_cast<HostStat> (srcHost->second);
-        h->incTxBytes(len);
+        h->add ({len,0});
     } else {
         trackUnmappedIp(src);
     }
 
     if (dstHost!=mapIpToHost.end()) {
         auto h = static_pointer_cast<HostStat> (dstHost->second);
-        h->incRxBytes (len);
+        h->add ({0,len});
     } else {
         trackUnmappedIp(dst);
     }

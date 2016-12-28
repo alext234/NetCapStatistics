@@ -17,8 +17,10 @@ void GroupStat::onNotified (const Metric& update) {
     m.add(update);
 
 }
-uint64_t GroupStat::getTotalTxBytes () { return m.txBytes;}
-uint64_t GroupStat::getTotalRxBytes () { return m.rxBytes;}
+
+const Metric& GroupStat::retrieve() {
+    return m;
+}
 
 using GroupSet = GroupStat::GroupSet;
 using GroupSetPtr = GroupStat::GroupSetPtr;

@@ -3,13 +3,6 @@
 using namespace std;
 
 
-void HostStat::incTxBytes (uint32_t n) { 
-    add({n,0});
-}
-
-void HostStat::incRxBytes (uint32_t n) { 
-    add({0,n});
-}
 
 void HostStat::add(Metric a) {
     m.add(a);
@@ -17,10 +10,12 @@ void HostStat::add(Metric a) {
     
 }
 
+const Metric & HostStat::retrieve() {
+    return m;
+}
+    
+
 HostStat::~HostStat() {
 }
-
-uint64_t HostStat::getRxBytes() { return m.rxBytes;}
-uint64_t HostStat::getTxBytes() { return m.txBytes;}
 
 
