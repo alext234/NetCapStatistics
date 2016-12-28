@@ -2,6 +2,7 @@
 #include "host_stat.h"
 #include <map>
 #include <memory>
+#include "shared_ptr_cmp.h"
 
 using namespace std;
 void GroupStat::addHost(shared_ptr<Hostipv4> host) {
@@ -25,7 +26,7 @@ const Metric& GroupStat::retrieve() {
 using GroupSet = GroupStat::GroupSet;
 using GroupSetPtr = GroupStat::GroupSetPtr;
 
-using HostMapOfGroupSetPtr = map<shared_ptr<HostStat>, GroupSetPtr, shared_ptr_host_ipv4_compare>;
+using HostMapOfGroupSetPtr = map<shared_ptr<HostStat>, GroupSetPtr, shared_ptr_less<Hostipv4>>;
 static HostMapOfGroupSetPtr hostGroupSet;
 void GroupStat::updateGroupList (shared_ptr<HostStat> host, shared_ptr<GroupStat> group){
     auto ret = hostGroupSet.find(host);

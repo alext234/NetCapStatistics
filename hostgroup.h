@@ -4,10 +4,7 @@
 #include "hostip.h"
 #include <set>
 #include <memory>
-
-struct shared_ptr_host_ipv4_compare {
-    bool operator() (const std::shared_ptr<Hostipv4>& lhs, const std::shared_ptr<Hostipv4>& rhs)const;
-};
+#include "shared_ptr_cmp.h"
 
 class HostGroup{
 public:
@@ -19,10 +16,10 @@ public:
 
     size_t size() { return hostSet.size();}
     std::string getName () {return name;}
-    std::set<std::shared_ptr<Hostipv4>, shared_ptr_host_ipv4_compare>  getHosts();
+    std::set<std::shared_ptr<Hostipv4>, shared_ptr_less<Hostipv4> >  getHosts();
 protected:
     std::string name;
-    std::set<std::shared_ptr<Hostipv4>, shared_ptr_host_ipv4_compare> hostSet;
+    std::set<std::shared_ptr<Hostipv4>,  shared_ptr_less<Hostipv4>   > hostSet;
     
 };
 

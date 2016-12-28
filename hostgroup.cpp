@@ -1,10 +1,5 @@
 #include "hostgroup.h"
 
-bool shared_ptr_host_ipv4_compare::operator() (const std::shared_ptr<Hostipv4>& lhs, const std::shared_ptr<Hostipv4>& rhs) const
-{
-   return *lhs < *rhs;
-}
-
 void HostGroup::addHost (std::shared_ptr<Hostipv4> host) {
     hostSet.insert(host); 
 
@@ -16,7 +11,7 @@ std::shared_ptr<Hostipv4> HostGroup::find (std::string hostname) {
     if (it==hostSet.end()) return nullptr;
     return *it;
 }
-std::set<std::shared_ptr<Hostipv4>, shared_ptr_host_ipv4_compare>   HostGroup::getHosts() {
+std::set<std::shared_ptr<Hostipv4>,   shared_ptr_less<Hostipv4>>   HostGroup::getHosts() {
     return hostSet;
 }
 
