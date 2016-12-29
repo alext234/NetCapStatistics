@@ -68,18 +68,26 @@ void PacketStat::trackUnmappedIp (uint32_t ip) {
 
 void PacketStat::updatePacketStat (uint32_t src, uint32_t dst, const Packet& packet) {
     auto len = packet.len();
-    auto srcHost = mapIpToHost.find(src);
-    auto dstHost = mapIpToHost.find(dst);
-    if (srcHost!=mapIpToHost.end()) {
-        auto h = static_pointer_cast<HostStat> (srcHost->second);
-        h->add ({len,0});
+    auto srcHostP = mapIpToHost.find(src);
+    auto dstHostP = mapIpToHost.find(dst);
+    shared_ptr<HostStat> s=nullptr;
+    shared_ptr<HostStat> d=nullptr;
+
+    if (srcHostP!=mapIpToHost.end()) {
+        s = static_pointer_cast<HostStat> (srcHostP->second);
+    }
+    if (dstHostP!=mapIpToHost.end()) {
+        d = static_pointer_cast<HostStat> (dstHostP->second);
+    }
+
+    if (s!=nullptr) {        
+        s->add (d,  {TxBytes(len),RxBytes(0)});  // note: d can be nullptr
     } else {
         trackUnmappedIp(src);
     }
 
-    if (dstHost!=mapIpToHost.end()) {
-        auto h = static_pointer_cast<HostStat> (dstHost->second);
-        h->add ({0,len});
+    if (d!=nullptr) {
+        d->add (s,  {TxBytes(0),RxBytes(len)});  // note: s can be nullptr
     } else {
         trackUnmappedIp(dst);
     }
