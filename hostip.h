@@ -6,6 +6,8 @@
 #include <sstream>
 #include <set>
 #include <memory>
+#include <tuple>
+
 
 class ParseIpException: public std::exception {
 public:
@@ -28,7 +30,7 @@ public:
             c = std::stoi(m[3]);
             d = std::stoi(m[4]);
 
-            hostname = ip_string;
+            hostname = "";
         } else {
             throw  ParseIpException ("invalid IP string");
         }
@@ -37,8 +39,8 @@ public:
     virtual ~Hostipv4() {}
    
     void setHostname (std::string name) { hostname = name;}
-    std::string getHostname () {return hostname;};
-    std::string getIpString () {
+    std::string getHostname () const {return hostname;};
+    std::string getIpString () const {
         std::ostringstream ss;
         ss<<int(a)<<"."<<int(b)<<"."<<int(c)<<"."<<int(d);
         return ss.str();
@@ -47,7 +49,7 @@ public:
     uint8_t B() {return b;};
     uint8_t C() {return c;};
     uint8_t D() {return d;};
-    uint32_t to_uint32t() { 
+    uint32_t to_uint32t() const { 
         uint32_t ret=d;
         ret|=c<<8;
         ret|=b<<16;
@@ -57,7 +59,12 @@ public:
     } 
     // comparison for set operation      
     friend bool operator< (const Hostipv4 &left, const Hostipv4 &right) {
-        return left.hostname< right.hostname;
+        auto leftIp = left.to_uint32t();
+        auto rightIp = right.to_uint32t();
+        if (leftIp!=0 && rightIp!=0) {
+            return leftIp < rightIp;
+        }
+        return left.hostname  < right.hostname;
     }
 
 private:    

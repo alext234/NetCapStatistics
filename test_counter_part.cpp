@@ -16,18 +16,18 @@ TEST(CounterPartList, checkCountersUpdate) {
     CounterPartList<HostStat> cplist; 
     auto A = make_shared<HostStat>("10.0.0.1");
     auto B = make_shared<HostStat>("10.0.0.2");
-    cplist.add (A, {TxBytes(2),RxBytes(2)}); 
-    cplist.add (B, {TxBytes(3),RxBytes(3)}); 
-    cplist.add (A, {TxBytes(2),RxBytes(2)}); 
-    cplist.add (B, {TxBytes(3),RxBytes(3)}); 
+    cplist.add (A, {TxBytes(2),RxBytes(5)}); 
+    cplist.add (B, {TxBytes(4),RxBytes(6)}); 
+    cplist.add (A, {TxBytes(3),RxBytes(7)}); 
+    cplist.add (B, {TxBytes(5),RxBytes(8)}); 
 
     Metric totalA = cplist.retrieve(A);
     Metric totalB = cplist.retrieve(make_shared<HostStat>("10.0.0.2"));
 
-    ASSERT_THAT (totalA.txBytes, Eq(uint64_t(4)));
-    ASSERT_THAT (totalA.rxBytes, Eq(uint64_t(4)));
-    ASSERT_THAT (totalB.txBytes, Eq(uint64_t(6)));
-    ASSERT_THAT (totalB.rxBytes, Eq(uint64_t(6)));
+    ASSERT_THAT (totalA.txBytes, Eq(uint64_t(5)));
+    ASSERT_THAT (totalA.rxBytes, Eq(uint64_t(12)));
+    ASSERT_THAT (totalB.txBytes, Eq(uint64_t(9)));
+    ASSERT_THAT (totalB.rxBytes, Eq(uint64_t(14)));
 }
 
 TEST(CounterPartList, checkListOfHostPeers) {
@@ -71,6 +71,10 @@ TEST(CounterPartList, checkListOfHostPeers) {
     pm = peerList.retrieve(static_pointer_cast<HostStat>(mapIpToHost.find(0x452C99B2)->second)); 
     //  0xC26DA29F  194.109.162.159 
     pm = peerList.retrieve(static_pointer_cast<HostStat>(mapIpToHost.find(0xC26DA29F)->second)); 
+
+    
+    //  0xC26DA29F  194.109.162.159 
+    pm = peerList.retrieve(make_shared<HostStat>("194.109.162.159")); 
 
 
 }
