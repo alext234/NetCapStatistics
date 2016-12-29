@@ -136,8 +136,8 @@ TEST(HostStat, observeUpdate) {
 
     auto updateObserver = std::make_shared<UpdateObserver>();
     host.registerObserver (updateObserver);
-    host.add({20,50});
-    host.add({20,50});
+    host.add({TxBytes(20),RxBytes(50)});
+    host.add({TxBytes(20),RxBytes(50)});
 
 
     ASSERT_THAT(updateObserver->m.txBytes, Eq(uint32_t(40)));
@@ -150,8 +150,8 @@ TEST(HostStat, observeUpdateWithGroupStat) {
     auto group = std::make_shared<GroupStat>("TestGroup");
     host.registerObserver (group);
 
-    host.add({20,50});
-    host.add({20,50});
+    host.add({TxBytes(20),RxBytes(50)});
+    host.add({TxBytes(20),RxBytes(50)});
 
     auto finalMetric = group->retrieve();
     ASSERT_THAT(finalMetric.txBytes, Eq(uint64_t(40)));
