@@ -19,6 +19,7 @@ private:
 
     // find, if not exist then insert
     inline std::shared_ptr<Metric> findAndInsert(const std::shared_ptr<T>& cp) ;
+    inline std::shared_ptr<Metric> find(const std::shared_ptr<T>& cp) ;
 };
 
 #include "counter_part.ipp"

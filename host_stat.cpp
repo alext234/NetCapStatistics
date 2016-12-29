@@ -3,13 +3,21 @@
 using namespace std;
 
 
-
 void HostStat::add(shared_ptr<HostStat> peer, Metric a) {
     m.add(a);
     HostStatNotifiedData data; 
     data.m=a;
-    // TODO: add peer to data structure
-    // TODO: track peer 
+    if (peer!=nullptr) {
+        Metric peerAdd;
+        peerAdd.txBytes = a.rxBytes;
+        peerAdd.rxBytes = a.txBytes;
+
+        peerList.add (peer, peerAdd );
+
+    }        
+
+    // TODO: add peer to data structure before notify
+
     notifyObservers (data); 
 }
 
@@ -22,6 +30,7 @@ const Metric & HostStat::retrieve() {
 }
 
 
+const CounterPartList<HostStat>& HostStat::getPeerList() { return peerList;}
 HostStat::~HostStat() {
 }
 

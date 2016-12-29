@@ -13,16 +13,16 @@ using namespace std;
 TEST(CounterPartList, checkCountersUpdate) {
     
     
-    CounterPartList<Hostipv4> cplist; 
-    auto A = make_shared<Hostipv4>("10.0.0.1");
-    auto B = make_shared<Hostipv4>("10.0.0.2");
+    CounterPartList<HostStat> cplist; 
+    auto A = make_shared<HostStat>("10.0.0.1");
+    auto B = make_shared<HostStat>("10.0.0.2");
     cplist.add (A, {TxBytes(2),RxBytes(2)}); 
     cplist.add (B, {TxBytes(3),RxBytes(3)}); 
     cplist.add (A, {TxBytes(2),RxBytes(2)}); 
     cplist.add (B, {TxBytes(3),RxBytes(3)}); 
 
     Metric totalA = cplist.retrieve(A);
-    Metric totalB = cplist.retrieve(B);
+    Metric totalB = cplist.retrieve(make_shared<HostStat>("10.0.0.2"));
 
     ASSERT_THAT (totalA.txBytes, Eq(uint64_t(4)));
     ASSERT_THAT (totalA.rxBytes, Eq(uint64_t(4)));
@@ -56,13 +56,21 @@ TEST(CounterPartList, checkListOfHostPeers) {
     // get a specific host
     auto ret1 = mapIpToHost.find(0xD57AD67F);  // 213.122.214.127
     auto host1 = static_pointer_cast<HostStat>(ret1->second);
-    // TODO:
-    //auto listPeers = host1.getListOfPeers();
-    // verify that list of peers should include 
+    auto peerList = host1->getPeerList();
+    Metric pm;
+    // retrieve stats with peer, should not throw exception
     //  0x50250925   80.37.9.37
+    pm = peerList.retrieve(static_pointer_cast<HostStat>(mapIpToHost.find(0x50250925)->second)); 
+    ASSERT_THAT (pm.txBytes, Eq(uint64_t(122)));
+    ASSERT_THAT (pm.rxBytes, Eq(uint64_t(244)));
+
+
     //  0x52D29BF8 82.210.155.248
+    pm = peerList.retrieve(static_pointer_cast<HostStat>(mapIpToHost.find(0x52D29BF8)->second)); 
     //  0x452C99B2 69.44.153.178
+    pm = peerList.retrieve(static_pointer_cast<HostStat>(mapIpToHost.find(0x452C99B2)->second)); 
     //  0xC26DA29F  194.109.162.159 
+    pm = peerList.retrieve(static_pointer_cast<HostStat>(mapIpToHost.find(0xC26DA29F)->second)); 
 
 
 }
