@@ -25,8 +25,9 @@ endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-unused-parameter -fsanitize=address")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-unused-parameter")
 
+set(SRC  hostgroup.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp summary.cpp packet_stat.cpp )
 
-add_executable(runtests_stat  tests.cpp test_counter_part.cpp hostgroup.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp)
+add_executable(runtests_stat  tests.cpp test_counter_part.cpp  ${SRC})
 set(SAMPLE_PCAP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples/)
 set_target_properties(runtests_stat PROPERTIES COMPILE_FLAGS -D'SAMPLE_PCAP_DIR="${SAMPLE_PCAP_DIR}"')
 target_link_libraries(runtests_stat gmock)
@@ -36,6 +37,6 @@ target_link_libraries(runtests_stat cpppcap)
 target_link_libraries(runtests_stat pcap)
 
 
-add_executable(ncstat ncstat.cpp hostgroup.cpp packet_stat.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp summary.cpp)
+add_executable(ncstat ncstat.cpp ${SRC})
 add_dependencies(ncstat runtests_stat) # test binaries should be ok before building the actual app
 target_link_libraries(ncstat cpppcap pcap)

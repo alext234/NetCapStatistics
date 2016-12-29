@@ -17,13 +17,14 @@ public:
     size_t size() { return hostSet.size();}
     std::string getName () {return name;}
     std::set<std::shared_ptr<Hostipv4>, shared_ptr_less<Hostipv4> >  getHosts();
+
+    // comparison for set operation      
+    friend bool operator< (const HostGroup &left, const HostGroup &right);
+     
 protected:
     std::string name;
     std::set<std::shared_ptr<Hostipv4>,  shared_ptr_less<Hostipv4>   > hostSet;
     
 };
 
-struct shared_ptr_host_group_compare {
-    bool operator() (const std::shared_ptr<HostGroup>& lhs, const std::shared_ptr<HostGroup>& rhs) const;
-};
 #endif // __HOST_GROUP__

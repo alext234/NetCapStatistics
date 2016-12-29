@@ -1,8 +1,5 @@
 #include "group_file_parser.h"
 
-bool shared_ptr_host_group_compare::operator() (const std::shared_ptr<HostGroup>& lhs, const std::shared_ptr<HostGroup>& rhs) const{
-        return lhs->getName() < rhs->getName();
-}
 
 void GroupFileParser::parseFile(std::string filename) {
     std::ifstream ifs(filename);
