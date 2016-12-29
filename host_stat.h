@@ -6,12 +6,16 @@
 using namespace std;
 
 
-class GroupStat; // forward declaration
-class HostStat: public Hostipv4, public Observable<Metric>  {
+struct HostStatNotifiedData {
+   Metric m; 
+};
+
+class HostStat: public Hostipv4, public Observable<HostStatNotifiedData>  {
 public:
     HostStat(string ip_string): Hostipv4(ip_string) {}
     ~HostStat();
 
+    void add(std::shared_ptr<HostStat> peer, Metric a);
     void add (Metric a);
     const Metric & retrieve();
 private:

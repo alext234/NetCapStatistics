@@ -125,11 +125,11 @@ TEST(ParseGroupFile, CheckHostName) {
 
 TEST(HostStat, observeUpdate) {
     HostStat host{"10.0.0.15"};
-    class UpdateObserver: public AbstractObserver<Metric>{
+    class UpdateObserver: public AbstractObserver<HostStatNotifiedData>{
     public:    
 
-        void onNotified (const Metric& update) override {
-            m.add(update);
+        void onNotified (const HostStatNotifiedData& update) override {
+            m.add(update.m);
         }
         Metric m;
     };

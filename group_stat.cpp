@@ -14,8 +14,9 @@ void GroupStat::addHost(shared_ptr<Hostipv4> host) {
     updateGroupList (hostStat, shared_from_this());
 }
 
-void GroupStat::onNotified (const Metric& update) {
-    m.add(update);
+void GroupStat::onNotified (const HostStatNotifiedData& update) {
+    m.add(update.m);
+
 
 }
 
