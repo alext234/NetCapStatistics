@@ -5,19 +5,20 @@ using namespace std;
 
 void HostStat::add(shared_ptr<HostStat> peer, Metric a) {
     m.add(a);
-    HostStatNotifiedData data; 
-    data.m=a;
     if (peer!=nullptr) {
         Metric peerAdd;
-        peerAdd.txBytes = a.rxBytes;
-        peerAdd.rxBytes = a.txBytes;
+        peerAdd.txBytes = a.txBytes;
+        peerAdd.rxBytes = a.rxBytes;
 
         peerList.add (peer, peerAdd );
 
     }        
 
-    // TODO: add peer to data structure before notify
 
+    HostStatNotifiedData data; 
+    data.m=a;
+    data.host = this; //use raw pointer as using shared pointer may cause exception  when 'this' has not shared_pointer pointed to
+    data.peer = peer; // can be nullptr 
     notifyObservers (data); 
 }
 

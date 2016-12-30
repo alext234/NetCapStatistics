@@ -8,9 +8,11 @@
 using namespace std;
 
 
+class HostStat;
 struct HostStatNotifiedData {
    Metric m; 
-   // TODO add host and peer
+   HostStat* host;
+   std::shared_ptr<HostStat> peer;
 };
 
 class HostStat: public Hostipv4, public Observable<HostStatNotifiedData>, public std::enable_shared_from_this<HostStat>  {

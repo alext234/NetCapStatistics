@@ -5,6 +5,8 @@
 #include <memory>
 #include "metric.h"
 #include "shared_ptr_cmp.h"
+#include <functional>
+
 
 template <typename T>
 class CounterPartList {
