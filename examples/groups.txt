@@ -32,3 +32,11 @@ host3
 host4
 host7
 host8
+
+
+[group5]
+host1
+
+
+[group6]
+host7

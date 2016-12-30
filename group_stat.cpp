@@ -2,7 +2,6 @@
 #include "host_stat.h"
 #include <map>
 #include <memory>
-#include "shared_ptr_cmp.h"
 
 using namespace std;
 void GroupStat::addHost(shared_ptr<Hostipv4> host) {
@@ -17,11 +16,49 @@ void GroupStat::addHost(shared_ptr<Hostipv4> host) {
 void GroupStat::onNotified (const HostStatNotifiedData& update) {
     m.add(update.m);
 
+    // update group's peers 
+    Metric peerAdd; 
+    peerAdd.txBytes = update.m.txBytes;
+    peerAdd.rxBytes = update.m.rxBytes;
+
+    
+
+    if (update.peer!=nullptr) {
+        auto it1 = hostSet.find(update.peer); 
+        if (it1!=hostSet.end() ) { // peer also exist in this group
+            return;
+        }
+        // get the groups of the peer
+   
+        auto peerGroups = getGroupsOfHost (update.peer);
+         
+        // iterate through the group,
+        for (auto group: peerGroups) {
+            if (!(*group == *this)) {
+                auto groupHosts = group->getHosts();
+                auto it2 = groupHosts.find(make_shared<HostStat>(update.host->getIpString())); 
+                if (it2!=groupHosts.end()) { 
+                    continue; // host should not be in peer's group
+                }
+                // if it is different from this group then add to peer
+                peerList.add (group,  peerAdd);
+
+            }
+        }
+
+
+    }
+    
+    
 
 }
 
 const Metric& GroupStat::retrieve() {
     return m;
+}
+
+const CounterPartList<GroupStat>& GroupStat::getPeerList(){
+    return peerList;
 }
 
 using GroupSet = GroupStat::GroupSet;
@@ -50,3 +87,6 @@ const GroupSet& GroupStat::getGroupsOfHost (std::shared_ptr<HostStat> host) {
     return *hostGroupSet[host];
 }
 
+bool operator==(const GroupStat& lhs, const GroupStat& rhs){
+    return lhs.name == rhs.name;
+}
