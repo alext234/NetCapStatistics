@@ -93,44 +93,24 @@ Running ncstat with all options will give the following output.
 
 ```
 $../build/ncstat -i files.lst -m groups.txt 
-
 start reading from : bt-tf1.pcap
-group1:
-	Tx: 273 bytes
-	Rx: 1,310 bytes
-group2:
-	Tx: 1,949 bytes
-	Rx: 912 bytes
-group3:
-	Tx: 302 bytes
-	Rx: 1,310 bytes
-group4:
-	Tx: 1,920 bytes
-	Rx: 912 bytes
-host1 (60.234.152.124):
-	Tx: 151 bytes
-	Rx: 122 bytes
-host2 (69.44.153.178):
-	Tx: 0 bytes
-	Rx: 822 bytes
-host3 (80.37.9.37):
-	Tx: 122 bytes
-	Rx: 244 bytes
-host4 (82.210.155.248):
-	Tx: 0 bytes
-	Rx: 122 bytes
-host5 (194.109.162.159):
-	Tx: 0 bytes
-	Rx: 122 bytes
-host6 (202.88.252.50):
-	Tx: 151 bytes
-	Rx: 244 bytes
-host7 (213.122.214.127):
-	Tx: 1,798 bytes
-	Rx: 424 bytes
-host8 (213.202.193.43):
-	Tx: 0 bytes
-	Rx: 122 bytes
+Individual groups and hosts :
+           name|                       TXbytes|                       RXbytes
+         group2|                         1,949|                           912
+         group4|                         1,920|                           912
+         group6|                         1,798|                           424
+         group3|                           302|                         1,310
+         group1|                           273|                         1,310
+         group5|                           151|                           122
+          host7|                         1,798|                           424
+          host2|                             0|                           822
+          host6|                           151|                           244
+          host3|                           122|                           244
+          host1|                           151|                           122
+          host4|                             0|                           122
+          host5|                             0|                           122
+          host8|                             0|                           122
+
 ```
 
 
