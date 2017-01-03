@@ -91,7 +91,7 @@ int main (int argc, char* argv[])
         processPcapList (packetStat, pcapList);
         
         
-        cout << summary.summaryString()<<endl;
+        cout << summary.eachTxRxBytes()<<endl;
         
     }
 }

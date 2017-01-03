@@ -22,7 +22,7 @@ public:
 
 
 
-    std::string summaryString();
+    std::string eachTxRxBytes();
 
 private:
     std::shared_ptr<PacketStat>& packetStat;
