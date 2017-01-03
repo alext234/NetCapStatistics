@@ -84,3 +84,24 @@ string Summary::eachTxRxBytes() {
 }
 
 
+string Summary::groupPeers() {
+    stringstream ss;
+
+    ss<<dec;
+    ss.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
+
+    ss<<setw(15)<<"peer" << SEP<<setw(30) <<"TXbytes (to peer)"<<SEP<<setw(30)<<"Rxbytes (from peer)"<<endl; // colum header 
+    for (auto groupStat: getListOfSortedGroups(allGroups)) { 
+        ss<<groupStat->getName()<<":"<<endl;
+        auto allPeers = groupStat->getPeerList().retrieveAll();
+        for (auto it=allPeers.cbegin(); it!=allPeers.cend(); ++it) {
+            auto peerGroup  = it->first;
+            auto peerMetric  = it->second;
+            ss<<setw(15)<<peerGroup->getName() << SEP<<setw(30) <<peerMetric->txBytes<<SEP<<setw(30)<<peerMetric->rxBytes<<endl;
+    
+        }
+
+    }
+
+    return ss.str();
+}

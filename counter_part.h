@@ -14,6 +14,7 @@ public:
     void add (const std::shared_ptr<T>& cp, Metric addition);
 
     const Metric& retrieve (const std::shared_ptr<T>& cp);
+    const auto& retrieveAll() const {return cparts;}
 
 private:  
     std::map<std::shared_ptr<T>, std::shared_ptr<Metric>, shared_ptr_less<T> >  cparts;

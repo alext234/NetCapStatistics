@@ -91,7 +91,11 @@ int main (int argc, char* argv[])
         processPcapList (packetStat, pcapList);
         
         
+        cout <<"Individual groups and hosts :"<<endl;
         cout << summary.eachTxRxBytes()<<endl;
+        cout <<endl;
+        cout <<"Group peers:"<<endl;
+        cout << summary.groupPeers()<<endl;
         
     }
 }
