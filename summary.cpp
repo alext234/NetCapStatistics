@@ -60,12 +60,12 @@ string Summary::eachTxRxBytes() {
     }
 
     setupStringStream(ss);
-    ss<<setw(15)<<"name"<<SEP<<setw(30)<<"TXbytes" << SEP<<setw(30) <<"RXbytes"<<endl; // colum header 
+    ss<<setw(20)<<"name"<<SEP<<setw(30)<<"TXbytes" << SEP<<setw(30) <<"RXbytes"<<endl; // colum header 
     // output groups
     for (auto groupStat: getListOfSortedGroups(allGroups)) { 
 
         auto metric = groupStat->retrieve();
-        ss << setw(15)<<groupStat->getName()<<SEP;
+        ss << setw(20)<<groupStat->getName()<<SEP;
         ss << setw(30)<< metric.txBytes<<SEP;
         ss << setw(30)<<metric.rxBytes<<endl;
     }
@@ -74,7 +74,7 @@ string Summary::eachTxRxBytes() {
     for (auto hostStat: getListOfSortedHosts(mapIpToHost)) { 
 
         auto metric = hostStat->retrieve();
-        ss << setw(15)<<hostStat->getHostname()<<SEP;
+        ss << setw(20)<<hostStat->getHostname()<<SEP;
         ss << setw(30)<< metric.txBytes<<SEP;
         ss << setw(30)<< metric.rxBytes<<endl;
     }
@@ -91,14 +91,14 @@ string Summary::groupPeers() {
     stringstream ss;
 
     setupStringStream(ss);
-    ss<<setw(15)<<"peer" << SEP<<setw(30) <<"TXbytes (to peer)"<<SEP<<setw(30)<<"Rxbytes (from peer)"<<endl; // colum header 
+    ss<<setw(20)<<"peer" << SEP<<setw(30) <<"TXbytes (to peer)"<<SEP<<setw(30)<<"Rxbytes (from peer)"<<endl; // colum header 
     for (auto groupStat: getListOfSortedGroups(allGroups)) { 
         ss<<"Peer(s) of "<<groupStat->getName()<<":"<<endl;
         auto allPeers = groupStat->getPeerList().retrieveAll();
         for (auto it=allPeers.cbegin(); it!=allPeers.cend(); ++it) {
             auto peerGroup  = it->first;
             auto peerMetric  = it->second;
-            ss<<setw(15)<<peerGroup->getName() << SEP<<setw(30) <<peerMetric->txBytes<<SEP<<setw(30)<<peerMetric->rxBytes<<endl;
+            ss<<setw(20)<<peerGroup->getName() << SEP<<setw(30) <<peerMetric->txBytes<<SEP<<setw(30)<<peerMetric->rxBytes<<endl;
     
         }
 
