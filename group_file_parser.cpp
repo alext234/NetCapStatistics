@@ -48,7 +48,7 @@ void GroupFileParser::parseFile(std::string filename) {
                 auto host =  allHosts->find(first);
                 if (host  ==nullptr) {
                     throw GroupFileParserException("hostname not defined at '"+line+"'"+"(line number:"+
-                    std::to_string(lineno) +")");
+                    std::to_string(lineno) +")");                    
                 }
                 if (currentGroup == nullptr) {
                     throw GroupFileParserException("hostname without a group at '"+line+"'");
