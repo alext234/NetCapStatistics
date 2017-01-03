@@ -9,6 +9,7 @@
 #include <tuple>
 
 
+#include <iostream>
 class ParseIpException: public std::exception {
 public:
     ParseIpException(std::string r) : _reason(r) {}
@@ -59,16 +60,17 @@ public:
     } 
     // comparison for set operation      
     friend bool operator< (const Hostipv4 &left, const Hostipv4 &right) {
-        auto leftIp = left.to_uint32t();
-        auto rightIp = right.to_uint32t();
-        if (leftIp!=0 && rightIp!=0) {
+        uint32_t leftIp = left.to_uint32t();
+        uint32_t rightIp = right.to_uint32t();       
+        if (left.hostname =="" || right.hostname=="") {
+            
             return leftIp < rightIp;
         }
-        return left.hostname  < right.hostname;
+        return left.hostname < right.hostname;
     }
 
 private:    
-    uint8_t a,b,c,d;   
+    uint8_t a=0,b=0,c=0,d=0;   
     std::string hostname;
 
  

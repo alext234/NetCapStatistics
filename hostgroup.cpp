@@ -7,7 +7,7 @@ void HostGroup::addHost (std::shared_ptr<Hostipv4> host) {
 std::shared_ptr<Hostipv4> HostGroup::find (std::string hostname) {
     auto tempHostIp = std::make_shared<Hostipv4> ("0.0.0.0");
     tempHostIp->setHostname(hostname);
-    auto it = hostSet.find(tempHostIp);
+    auto it = hostSet.find(tempHostIp);    
     if (it==hostSet.end()) return nullptr;
     return *it;
 }

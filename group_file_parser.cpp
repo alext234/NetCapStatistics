@@ -1,4 +1,5 @@
 #include "group_file_parser.h"
+#include <string>
 
 
 void GroupFileParser::parseFile(std::string filename) {
@@ -6,10 +7,12 @@ void GroupFileParser::parseFile(std::string filename) {
     std::string line;
     ptr_HostGroup currentGroup=nullptr;
     auto allHosts = std::make_shared<HostGroup> ("AllHosts");
+    uint16_t lineno=0;
     while(std::getline(ifs, line).good()) {
         std::istringstream iss(line);
         std::string first, second;
         iss >> first>> second;
+        ++lineno;
        
         if (first.length()>0 && first[0]=='#') {
             continue; // comment line
@@ -17,7 +20,7 @@ void GroupFileParser::parseFile(std::string filename) {
         if (first.length()>0 && second.length()>0) {
             try {
                 std::shared_ptr<Hostipv4> hostIp = hostipv4Factory(first);
-                hostIp -> setHostname (second);
+                hostIp -> setHostname (second);                
                 allHosts->addHost (hostIp);
                 mapIpToHost[hostIp->to_uint32t()] = hostIp;
 
@@ -44,7 +47,8 @@ void GroupFileParser::parseFile(std::string filename) {
                 // should be hostname. check if exist
                 auto host =  allHosts->find(first);
                 if (host  ==nullptr) {
-                    throw GroupFileParserException("hostname not defined at '"+line+"'");
+                    throw GroupFileParserException("hostname not defined at '"+line+"'"+"(line number:"+
+                    std::to_string(lineno) +")");                    
                 }
                 if (currentGroup == nullptr) {
                     throw GroupFileParserException("hostname without a group at '"+line+"'");
