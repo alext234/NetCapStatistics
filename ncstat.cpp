@@ -97,5 +97,7 @@ int main (int argc, char* argv[])
         cout <<"Group peers:"<<endl;
         cout << summary.groupPeers()<<endl;
         
+        cout <<"Host peers:"<<endl;
+        cout << summary.hostPeers()<<endl;
     }
 }

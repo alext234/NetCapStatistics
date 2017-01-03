@@ -24,6 +24,7 @@ public:
 
     std::string eachTxRxBytes();
     std::string groupPeers();
+    std::string hostPeers();
 
 private:
     std::shared_ptr<PacketStat>& packetStat;

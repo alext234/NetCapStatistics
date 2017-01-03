@@ -45,6 +45,11 @@ static vector<shared_ptr<HostStat>> getListOfSortedHosts(GroupFileParser::MapIpT
 }
 
 static const string SEP="|";
+static void setupStringStream(stringstream& ss) {
+    ss<<dec;
+    ss.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
+}
+
 string Summary::eachTxRxBytes() {
     stringstream ss;
 
@@ -54,9 +59,7 @@ string Summary::eachTxRxBytes() {
         for (auto ip: listOfUnmappedIps) { ss<<ipString(ip)<<endl;    }
     }
 
-    ss<<dec;
-    ss.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
-
+    setupStringStream(ss);
     ss<<setw(15)<<"name"<<SEP<<setw(30)<<"TXbytes" << SEP<<setw(30) <<"RXbytes"<<endl; // colum header 
     // output groups
     for (auto groupStat: getListOfSortedGroups(allGroups)) { 
@@ -87,17 +90,36 @@ string Summary::eachTxRxBytes() {
 string Summary::groupPeers() {
     stringstream ss;
 
-    ss<<dec;
-    ss.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
-
+    setupStringStream(ss);
     ss<<setw(15)<<"peer" << SEP<<setw(30) <<"TXbytes (to peer)"<<SEP<<setw(30)<<"Rxbytes (from peer)"<<endl; // colum header 
     for (auto groupStat: getListOfSortedGroups(allGroups)) { 
-        ss<<groupStat->getName()<<":"<<endl;
+        ss<<"Peer(s) of "<<groupStat->getName()<<":"<<endl;
         auto allPeers = groupStat->getPeerList().retrieveAll();
         for (auto it=allPeers.cbegin(); it!=allPeers.cend(); ++it) {
             auto peerGroup  = it->first;
             auto peerMetric  = it->second;
             ss<<setw(15)<<peerGroup->getName() << SEP<<setw(30) <<peerMetric->txBytes<<SEP<<setw(30)<<peerMetric->rxBytes<<endl;
+    
+        }
+
+    }
+
+    return ss.str();
+}
+
+string Summary::hostPeers() {
+    stringstream ss;
+
+    setupStringStream(ss);
+
+    ss<<setw(15)<<"peer" << SEP<<setw(30) <<"TXbytes (to peer)"<<SEP<<setw(30)<<"Rxbytes (from peer)"<<endl; // colum header 
+    for (auto hostStat: getListOfSortedHosts(mapIpToHost)) { 
+        ss<<"Peer(s) of "<< hostStat->getHostname()<<":"<<endl;
+        auto allPeers = hostStat->getPeerList().retrieveAll();
+        for (auto it=allPeers.cbegin(); it!=allPeers.cend(); ++it) {
+            auto peerHost = it->first;
+            auto peerMetric  = it->second;
+            ss<<setw(15)<<peerHost->getHostname() << SEP<<setw(30) <<peerMetric->txBytes<<SEP<<setw(30)<<peerMetric->rxBytes<<endl;
     
         }
 
