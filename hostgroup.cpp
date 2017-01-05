@@ -16,6 +16,11 @@ std::set<std::shared_ptr<Hostipv4>,   shared_ptr_less<Hostipv4>>   HostGroup::ge
 }
 
 
-bool operator< (const HostGroup &left, const HostGroup &right) {
+bool HostGroup::isLessThan (const HostGroup& right) const {
+    const HostGroup& left = *this;
     return left.name< right.name;
-} 
+}
+
+bool operator< (const HostGroup &left, const HostGroup &right){
+    return left.isLessThan (right);
+}
