@@ -58,8 +58,9 @@ public:
         return ret;
 
     } 
-    // comparison for set operation      
-    friend bool operator< (const Hostipv4 &left, const Hostipv4 &right) {
+    bool isLessThan(const Hostipv4& right) const {
+        const Hostipv4& left =*this;
+
         uint32_t leftIp = left.to_uint32t();
         uint32_t rightIp = right.to_uint32t();       
         if (left.hostname =="" || right.hostname=="") {
@@ -69,10 +70,12 @@ public:
         return left.hostname < right.hostname;
     }
 
+
 private:    
     uint8_t a=0,b=0,c=0,d=0;   
     std::string hostname;
 
  
 };
+bool operator< (const Hostipv4 &left, const Hostipv4 &right);
 #endif //__HOST_IP__
