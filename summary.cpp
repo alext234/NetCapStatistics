@@ -3,6 +3,44 @@
 #include <iomanip>
 
 using namespace std;
+// anonymous namespace instead of static funcitions
+namespace {
+    vector<shared_ptr<GroupStat>> getListOfSortedGroups(GroupFileParser::SetPtrHostGroup allGroups) {
+    
+        vector<shared_ptr<GroupStat>> sortedGroups ;
+        for (auto group: allGroups) {
+            auto groupStat = static_pointer_cast<GroupStat>(group);
+            sortedGroups.push_back(groupStat);
+        }
+        sort (sortedGroups.begin(), sortedGroups.end(), 
+        [](shared_ptr<GroupStat> lhs, shared_ptr<GroupStat> rhs)->bool {
+            auto lhsMetric = lhs->retrieve();
+            auto rhsMetric = rhs->retrieve();
+            return lhsMetric.txBytes+lhsMetric.rxBytes > rhsMetric.txBytes+rhsMetric.rxBytes;
+        });
+        return sortedGroups;
+    }
+    vector<shared_ptr<HostStat>> getListOfSortedHosts(GroupFileParser::MapIpToHost mapIpToHost) {
+    
+        vector<shared_ptr<HostStat>> sortedHosts ;
+        for (auto it=mapIpToHost.cbegin(); it!=mapIpToHost.cend(); ++it) {
+            auto host = static_pointer_cast<HostStat>(it->second);
+            sortedHosts.push_back(host);
+        }
+        sort (sortedHosts.begin(), sortedHosts.end(), 
+        [](shared_ptr<HostStat> lhs, shared_ptr<HostStat> rhs)->bool {
+            auto lhsMetric = lhs->retrieve();
+            auto rhsMetric = rhs->retrieve();
+            return lhsMetric.txBytes+lhsMetric.rxBytes > rhsMetric.txBytes+rhsMetric.rxBytes;
+        });
+        return sortedHosts;
+    }
+    const string SEP="|";
+    void setupStringStream(stringstream& ss) {
+        ss<<dec;
+        ss.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
+    }
+} // anonymous namespace
 string ipString (uint32_t ip) {
     stringstream ss;
 
@@ -13,42 +51,7 @@ string ipString (uint32_t ip) {
     return ss.str();
 }
 
-static vector<shared_ptr<GroupStat>> getListOfSortedGroups(GroupFileParser::SetPtrHostGroup allGroups) {
 
-    vector<shared_ptr<GroupStat>> sortedGroups ;
-    for (auto group: allGroups) {
-        auto groupStat = static_pointer_cast<GroupStat>(group);
-        sortedGroups.push_back(groupStat);
-    }
-    sort (sortedGroups.begin(), sortedGroups.end(), 
-    [](shared_ptr<GroupStat> lhs, shared_ptr<GroupStat> rhs)->bool {
-        auto lhsMetric = lhs->retrieve();
-        auto rhsMetric = rhs->retrieve();
-        return lhsMetric.txBytes+lhsMetric.rxBytes > rhsMetric.txBytes+rhsMetric.rxBytes;
-    });
-    return sortedGroups;
-}
-static vector<shared_ptr<HostStat>> getListOfSortedHosts(GroupFileParser::MapIpToHost mapIpToHost) {
-
-    vector<shared_ptr<HostStat>> sortedHosts ;
-    for (auto it=mapIpToHost.cbegin(); it!=mapIpToHost.cend(); ++it) {
-        auto host = static_pointer_cast<HostStat>(it->second);
-        sortedHosts.push_back(host);
-    }
-    sort (sortedHosts.begin(), sortedHosts.end(), 
-    [](shared_ptr<HostStat> lhs, shared_ptr<HostStat> rhs)->bool {
-        auto lhsMetric = lhs->retrieve();
-        auto rhsMetric = rhs->retrieve();
-        return lhsMetric.txBytes+lhsMetric.rxBytes > rhsMetric.txBytes+rhsMetric.rxBytes;
-    });
-    return sortedHosts;
-}
-
-static const string SEP="|";
-static void setupStringStream(stringstream& ss) {
-    ss<<dec;
-    ss.imbue(std::locale("")); //  // imbue global locale ; for comma separated numbers
-}
 
 string Summary::eachTxRxBytes() {
     stringstream ss;
