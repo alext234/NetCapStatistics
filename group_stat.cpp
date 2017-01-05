@@ -36,7 +36,7 @@ void GroupStat::onNotified (const HostStatNotifiedData& update) {
         for (auto group: peerGroups) {
             if (!(*group == *this)) {
                 auto groupHosts = group->getHosts();
-                auto it2 = groupHosts.find(make_shared<HostStat>(update.host->getIpString())); 
+                auto it2 = groupHosts.find(make_shared<HostStat>(getIpString(*(update.host)))); 
                 if (it2!=groupHosts.end()) { 
                     continue; // host should not be in peer's group
                 }

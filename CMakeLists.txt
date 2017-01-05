@@ -25,7 +25,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-unused-parameter -fsanitize=address")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g -std=c++1y -Wall -Wextra -Wno-unused-parameter")
 
-set(SRC  hostgroup.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp summary.cpp packet_stat.cpp )
+set(SRC  hostgroup.cpp host_stat.cpp group_stat.cpp group_file_parser.cpp summary.cpp packet_stat.cpp hostip.cpp)
 
 add_executable(runtests_stat  tests.cpp test_counter_part.cpp  ${SRC})
 set(SAMPLE_PCAP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/examples/)
